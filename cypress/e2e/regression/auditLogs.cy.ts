@@ -26,9 +26,9 @@ describe("Audit Logs Module", () => {
 
   it("AUDIT-001 Export Audit Logs", () => {
 
-    cy.log("Opening audit logs for admin user")
+    cy.log("Opening audit logs for first user in table")
 
-    usersPage.openAuditLogs(testUsers.admin)
+    usersPage.openAuditLogsByIndex()
 
     cy.log("Opening export modal")
 

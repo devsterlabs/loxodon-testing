@@ -1,5 +1,5 @@
 import { RolesPage } from "../../pages/roles.page"
-import { permissions, roleProviders } from "../../data/roles.data"
+import { permissions } from "../../data/roles.data"
 import { setupCommonIntercepts } from "../../support/intercepts"
 
 const roles = new RolesPage()
@@ -7,7 +7,6 @@ const roles = new RolesPage()
 describe("Roles Module - Regression Suite",() => {
 
   const roleName = `Cypress Role ${Date.now()}`
-  const roleId = roleProviders[Math.floor(Math.random()*roleProviders.length)]
 
   beforeEach(() => {
 
@@ -29,17 +28,21 @@ describe("Roles Module - Regression Suite",() => {
 
   it("ROLE-001 Create role with permissions",() => {
 
-    roles.openCreateRoleModal()
+    roles.getFirstRoleKlantId().then((roleId) => {
 
-    roles.fillRoleForm(roleName,roleId)
+      roles.openCreateRoleModal()
 
-    roles.selectPermissions(permissions)
+      roles.fillRoleForm(roleName,roleId)
 
-    roles.submitRole()
+      roles.selectPermissions(permissions)
 
-    roles.searchRole(roleName)
+      roles.submitRole()
 
-    roles.verifyRoleCreated(roleName)
+      roles.searchRole(roleName)
+
+      roles.verifyRoleCreated(roleName)
+
+    })
 
   })
 

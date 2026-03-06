@@ -36,6 +36,25 @@ class UsersPage {
 
   }
 
+  openAuditLogsByIndex(userIndex: number = 0) {
+
+    cy.log(`Opening audit logs for user at index: ${userIndex}`)
+
+    cy.get("tbody tr")
+      .eq(userIndex)
+      .as("userRow")
+
+    cy.get("@userRow")
+      .find('[class*="rowActions"] button')
+      .first()
+      .click({ force: true })
+
+    cy.wait("@getAuditLogs")
+      .its("response.statusCode")
+      .should("eq", 200)
+
+  }
+
   exportAuditLogs() {
 
     cy.log("Exporting audit logs")

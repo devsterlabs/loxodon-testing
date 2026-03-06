@@ -23,7 +23,20 @@ export class RolesPage {
 
   }
 
- fillRoleForm(roleName:string, roleId:string) {
+  getFirstRoleKlantId() {
+
+    cy.log("Reading Klant ID from first role row")
+
+    return cy.get("tbody tr")
+      .first()
+      .find("td")
+      .eq(2)
+      .invoke("text")
+      .then((text) => Number(text.trim()))
+
+  }
+
+ fillRoleForm(roleName:string, roleId:number) {
 
   cy.log(`Typing role name: ${roleName}`)
 
@@ -35,7 +48,7 @@ export class RolesPage {
 
   cy.get('#role-tenant-id')
     .clear()
-    .type(roleId)
+    .type(roleId.toString())
 
 }
 selectPermissions(permissions: string[]) {
