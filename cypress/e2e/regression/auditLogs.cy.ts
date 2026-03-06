@@ -26,9 +26,49 @@ describe("Audit Logs Module", () => {
 
   it("AUDIT-001 Export Audit Logs", () => {
 
-    usersPage.openAuditLogs(testUsers.admin.email)
+    cy.log("Opening audit logs for admin user")
+
+    usersPage.openAuditLogs(testUsers.admin)
+
+    cy.log("Opening export modal")
 
     usersPage.exportAuditLogs()
+
+    cy.contains("Export Audit Logs")
+      .should("be.visible")
+
+    cy.log("Setting export date range")
+
+    cy.get("#start-date")
+      .type("2025-01-01")
+
+    cy.get("#end-date")
+      .type("2026-12-31")
+
+    cy.log("Tracking export API")
+
+    cy.intercept("POST", "**/audit-logs/export**")
+      .as("exportLogs")
+
+    cy.log("Clicking Export button")
+    cy.contains("Export Audit Logs")
+      .parent()
+      .parent()
+      .find("button")
+      .contains("Export")
+      .click()
+
+    cy.wait("@exportLogs")
+      .its("response.statusCode")
+      .should("eq", 200)
+
+    cy.log("Verifying success message")
+
+    cy.contains("Audit logs exported")
+      .should("be.visible")
+
+    cy.contains("Export Audit Logs")
+      .should("not.exist")
 
   })
 

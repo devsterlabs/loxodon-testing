@@ -1,6 +1,7 @@
 import { DashboardPage } from "../../pages/dashboard.page"
 import { setupCommonIntercepts } from "../../support/intercepts"
 import { dashboardSections } from "../../data/dashboard.data"
+import { testUsers } from "../../data/testUsers"
 
 const dashboard = new DashboardPage()
 
@@ -31,13 +32,8 @@ describe("Dashboard Regression Suite", () => {
 
       cy.log(`Checking section: ${section}`)
 
-      // ===== FUTURE VERSION (TEST IDs) =====
-      // cy.get(`[data-testid="dashboard-${section.toLowerCase()}"]`)
-      //   .scrollIntoView()
-      //   .should("be.visible")
-
-      // ===== CURRENT DEPLOYED VERSION =====
-      cy.contains("span", section)
+     
+      cy.get(`[data-testid="dashboard-${section.toLowerCase()}"]`)
         .scrollIntoView()
         .should("be.visible")
 
@@ -73,41 +69,6 @@ describe("Dashboard Regression Suite", () => {
 
   })
 
-
-  it("DASH-004 Logout Flow", () => {
-
-    cy.log("Opening profile dropdown")
-
-    // ===== FUTURE VERSION =====
-    // cy.get('[data-testid="profile-menu-button"]').click()
-    // cy.get('[data-testid="dropdown-logout-button"]').click()
-
-
-    // ===== CURRENT DEPLOYED VERSION =====
-    cy.get("header button")
-      .last()
-      .click()
-
-    cy.contains("Uitloggen")
-      .should("be.visible")
-      .click()
-
-    
-    cy.log("Session timeout modal should appear")
-
-    cy.get('[data-testid="session-timeout-modal"]')
-      .should("be.visible")
-
-    cy.log("Clicking Sign Out from modal")
-
-    cy.get('[data-testid="session-timeout-signout"]')
-      .should("be.visible")
-      .click()
-
-   
-
-  })
-
   it("DASH-004 Logout Flow", () => {
 
   dashboard.logout()
@@ -115,7 +76,13 @@ describe("Dashboard Regression Suite", () => {
   cy.get('[data-testid="session-timeout-modal"]')
     .should("be.visible")
 
-  dashboard.clickSessionSignOut()
+  dashboard.clickSessionSignOut(testUsers.admin)
+    cy.log("Selecting account to complete sign-out")
+
+
+
+  cy.url().should('include', 'login')
+ 
 
 })
 

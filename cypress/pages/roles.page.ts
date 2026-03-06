@@ -18,60 +18,46 @@ export class RolesPage {
 
     cy.log("Opening create role modal")
 
-    // future selector
-    // cy.get('[data-testid="new-role-button"]').click()
-
-    cy.contains("button",/New|Nieuw/i)
-      .should("be.visible")
-      .click()
-
-    cy.contains(/Add Role|Rol toevoegen/i)
-      .should("be.visible")
+  
+    cy.get('[data-testid="new-role-button"]').click()
 
   }
 
-  fillRoleForm(roleName:string,roleId:string) {
+ fillRoleForm(roleName:string, roleId:string) {
 
-    cy.log(`Typing role name: ${roleName}`)
+  cy.log(`Typing role name: ${roleName}`)
 
-    cy.get('input[type="text"]')
-      .eq(0)
-      .clear()
-      .type(roleName)
+  cy.get('#role-title')
+    .clear()
+    .type(roleName)
 
-    cy.log(`Typing role id: ${roleId}`)
+  cy.log(`Typing tenant id: ${roleId}`)
 
-    cy.get('input[type="text"]')
-      .eq(1)
-      .clear()
-      .type(roleId)
+  cy.get('#role-tenant-id')
+    .clear()
+    .type(roleId)
 
-  }
+}
+selectPermissions(permissions: string[]) {
 
-  selectPermissions(permissions:string[]) {
+  permissions.forEach(permission => {
 
-    permissions.forEach(permission => {
+    cy.log(`Selecting permission: ${permission}`)
 
-      cy.log(`Selecting permission: ${permission}`)
+    const checkboxId = permission.replace('.', '-')
 
-      cy.contains(permission)
-        .scrollIntoView()
-        .parents("div")
-        .first()
-        .within(() => {
+    cy.get(`#${checkboxId}`)
+      .scrollIntoView()
+      .check({ force: true })
 
-          cy.get('input[type="checkbox"]')
-            .check({force:true})
+  })
 
-        })
-
-    })
-
-  }
+}
 
   submitRole() {
 
     cy.log("Submitting role form")
+    
 
     cy.contains("button",/Add|Toevoegen/i)
       .scrollIntoView()

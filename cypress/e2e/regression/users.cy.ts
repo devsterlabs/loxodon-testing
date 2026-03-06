@@ -26,7 +26,7 @@ describe("Users Module", () => {
 
   it("USER-001 Update User Role", () => {
 
-    usersPage.updateUserRole(testUsers.admin.email)
+    usersPage.updateUserRole()
 
   })
 

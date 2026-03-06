@@ -80,14 +80,10 @@ Cypress.Commands.add("loginWithEntraId", () => {
 
               cy.on("uncaught:exception", () => false);
 
-              // Click "Use your password" only if that option appears
-              cy.get("body", { timeout: 20000 }).then(($body) => {
-                if ($body.text().includes("Use your password")) {
-                  cy.contains("Use your password")
-                    .should("be.visible")
-                    .click({ force: true });
-                }
-              });
+              // Click "Use your password" if verification screen appears
+              cy.contains("Use your password", { timeout: 20000 })
+                .should("be.visible")
+                .click({ force: true });
 
               // Enter password
               cy.get('input[name="passwd"]', { timeout: 20000 })

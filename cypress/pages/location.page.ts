@@ -4,19 +4,21 @@ export class LocationPage {
     cy.log("Navigating to Location page")
     cy.visit("/location")
   }
+openFromSidebar() {
 
-  openFromSidebar() {
+  cy.log("Opening sidebar")
 
-    cy.log("Opening Location page from sidebar")
+  cy.get('button')
+    .first()
+    .click()
 
-    // FUTURE (when test ids exist)
-    // cy.get('[data-testid="nav-location"]').click()
+  cy.log("Clicking GeoMap")
 
-    cy.get('a[href="/location"]')
-      .should("be.visible")
-      .click()
-  }
+  cy.get('a[href="/location"]')
+    .should('be.visible')
+    .click()
 
+}
   verify404Page() {
 
     cy.log("Verifying 404 page elements")
@@ -39,11 +41,11 @@ export class LocationPage {
     cy.log("Clicking Go Back button")
 
     // FUTURE selector
-    // cy.get('[data-testid="go-back-button"]').click()
+    cy.get('[data-testid="go-back-button"]').click()
 
-    cy.contains('Ga terug')
-      .should("be.visible")
-      .click()
+    // cy.contains('Ga terug')
+    //   .should("be.visible")
+    //   .click()
 
   }
 

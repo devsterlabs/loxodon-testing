@@ -1,3 +1,4 @@
+
 export class DashboardPage {
 
   visit() {
@@ -23,22 +24,12 @@ export class DashboardPage {
 
     cy.log("Opening profile dropdown")
 
-    // ===== FUTURE VERSION (when test IDs deployed) =====
-    // cy.get('[data-testid="profile-menu-button"]')
-    //   .should("be.visible")
-    //   .click()
-
-    // cy.get('[data-testid="profile-dropdown"]')
-    //   .should("be.visible")
-
-
-    // ===== CURRENT DEPLOYED VERSION =====
-    cy.get("header button")
-      .last()
+   
+    cy.get('[data-testid="profile-menu-button"]')
       .should("be.visible")
       .click()
 
-    cy.contains("Gebruiker")
+    cy.get('[data-testid="profile-dropdown"]')
       .should("be.visible")
 
   }
@@ -49,15 +40,7 @@ export class DashboardPage {
     sections.forEach(section => {
 
       cy.log(`Checking dashboard section: ${section}`)
-
-      // ===== FUTURE VERSION (test ids) =====
-      // cy.get(`[data-testid="dashboard-${section.toLowerCase()}"]`)
-      //   .scrollIntoView()
-      //   .should("be.visible")
-
-
-      // ===== CURRENT DEPLOYED VERSION =====
-      cy.contains("span", section)
+      cy.get(`[data-testid="dashboard-${section.toLowerCase()}"]`)
         .scrollIntoView()
         .should("be.visible")
 
@@ -79,33 +62,33 @@ export class DashboardPage {
 
   }
 
-
   logout() {
 
     cy.log("Logging out from profile menu")
 
     this.openProfile()
-
-    // ===== FUTURE VERSION =====
-    // cy.get('[data-testid="dropdown-logout-button"]')
-    //   .click()
-
-
-    // ===== CURRENT DEPLOYED VERSION =====
-    cy.contains("Uitloggen")
-      .should("be.visible")
+    cy.get('[data-testid="dropdown-logout-button"]')
       .click()
 
-    
-
   }
-   clickSessionSignOut() {
+   clickSessionSignOut(email: string) {
 
     cy.log("Clicking Sign Out in session timeout modal")
 
     cy.get('[data-testid="session-timeout-signout"]')
       .should("be.visible")
       .click()
+
+    cy.origin("https://login.microsoftonline.com", { args: { email } }, ({ email }) => {
+    cy.log(`Selecting account: ${email}`);
+    
+ 
+    cy.contains(email, { timeout: 10000 })
+      .should('be.visible')
+      .click();
+    
+  
+    });
    }
 
 }
