@@ -41,6 +41,8 @@ Cypress.Commands.add("loginWithEntraId", () => {
         username,
       ];
 
+      const expectedAppHost = new URL(Cypress.config("baseUrl")).hostname;
+
       cy.session(
         sessionId,
         () => {
@@ -99,17 +101,17 @@ Cypress.Commands.add("loginWithEntraId", () => {
               cy.contains("button, input", "Yes", { timeout: 20000 })
                 .click({ force: true });
 
-              // wait until Microsoft redirects away
-              cy.location("hostname", { timeout: 120000 })
-                .should("include", "loxodon-dev.work.gd");
-
             }
           );
 
 
           // Wait for redirect back to app
           cy.url({ timeout: 120000 })
-            .should("include", "loxodon-dev.work.gd");
+            .should("include", expectedAppHost);
+
+          // Only cache the session after the authenticated app shell is visible.
+          cy.contains("Administrator cockpit", { timeout: 60000 })
+            .should("be.visible");
 
         },
 
@@ -132,6 +134,3 @@ Cypress.Commands.add("loginWithEntraId", () => {
   );
 });
 export { };
-
-
-

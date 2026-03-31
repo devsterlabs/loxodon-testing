@@ -19,7 +19,7 @@ module.exports = defineConfig({
     openMode: 0
   },
   e2e: {
-    baseUrl: "https://loxodon-dev.work.gd",
+    baseUrl: process.env.CYPRESS_BASE_URL || "https://loxodon-dev.work.gd",
     experimentalModifyObstructiveThirdPartyCode: true,
     setupNodeEvents(on, config) {
       config.env = {
